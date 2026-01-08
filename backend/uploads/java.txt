@@ -1,0 +1,49 @@
+variables are type of containers that are used to store values 
+
+datatypes define the type of variables 
+we have two types of data types- primitive and non primitive
+Data Type	Description
+byte	Stores whole numbers from -128 to 127
+short	Stores whole numbers from -32,768 to 32,767
+int	Stores whole numbers from -2,147,483,648 to 2,147,483,647
+long	Stores whole numbers from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+float	Stores fractional numbers. Sufficient for storing 6 to 7 decimal digits
+double	Stores fractional numbers. Sufficient for storing 15 to 16 decimal digits
+boolean	Stores true or false values
+char	Stores a single character/letter or ASCII values
+
+Non primitive datatypes are called reference types because they refer to objects.
+Primitive types in Java are predefined and built into the language, while non-primitive types are created by the programmer (except for String).
+Non-primitive types can be used to call methods to perform certain operations, whereas primitive types cannot.
+
+Type casting is when you assign a value of one primitive data type to another type.
+In Java, there are two types of casting:
+Widening Casting (automatically) - converting a smaller type to a larger type size
+byte -> short -> char -> int -> long -> float -> double
+Narrowing Casting (manually) - converting a larger type to a smaller size type
+double -> float -> long -> int -> char -> short -> byte
+
+Operators are used to perform operations on variables and values.
+Arithmetic operators Assignment operators Comparison operators Logical operators Bitwise operators
+x=5 ++x -> 6, x++ -> 5
+
+| Data Type | Method                   | Example Input                    |
+| --------- | ------------------------ | -------------------------------- |
+| `int`     | `nextInt()`              | `int age = sc.nextInt();`        |
+| `float`   | `nextFloat()`            | `float f = sc.nextFloat();`      |
+| `double`  | `nextDouble()`           | `double d = sc.nextDouble();`    |
+| `String`  | `next()` → one word      | `String name = sc.next();`       |
+| `String`  | `nextLine()` → full line | `String line = sc.nextLine();`   |
+| `char`    | `sc.next().charAt(0)`    | `char ch = sc.next().charAt(0);` |
+| `boolean` | `nextBoolean()`          | `boolean b = sc.nextBoolean();`  |
+
+Java has the following conditional statements:
+
+Use if to specify a block of code to be executed, if a specified condition is true
+Use else to specify a block of code to be executed, if the same condition is false
+Use else if to specify a new condition to test, if the first condition is false
+Use switch to specify many alternative blocks of code to be executed
+
+Loops are used to repeat a block of code multiple times until a condition is false.
+
+

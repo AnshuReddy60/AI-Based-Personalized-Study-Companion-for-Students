@@ -1,0 +1,1 @@
+A modern day website is made up of three different files or codes and these files are HTML, JavaScript and CSS. HTML defines the structure of a website and JavaScript defines the behavior of that website. CSS defines the overall appearance and style of that site and is called cascading style sheet.

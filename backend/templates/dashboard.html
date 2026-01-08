@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MindMuse Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<style>
+body { background-color: #f4f6f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.navbar-brand { font-weight: 700; font-size: 1.5rem; }
+.card { border-radius: 12px; transition: transform 0.3s, box-shadow 0.3s; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+.section { display: none; padding: 30px 0; }
+.section.active { display: block; }
+.chart-wrap { min-height: 200px; }
+.small-muted { font-size: 0.9rem; color: #6c757d; }
+#greeting-container { margin-bottom: 25px; }
+#greeting-container h2 { font-weight: 700; font-size: 1.8rem; }
+#greeting-container p { font-size: 1rem; color: #495057; }
+.tool-card { cursor: pointer; transition: transform 0.2s; }
+.tool-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.tool-btn { width: 100%; font-weight: 600; border-radius: 10px; padding: 10px 0; transition: all 0.2s; text-decoration: none; color: white; }
+.btn-primary { background-color: #0d6efd; border-color: #0d6efd; }
+.btn-success { background-color: #198754; border-color: #198754; }
+.btn-warning { background-color: #ffc107; border-color: #ffc107; color: #000; }
+.btn-danger { background-color: #dc3545; border-color: #dc3545; }
+.btn-info { background-color: #0dcaf0; border-color: #0dcaf0; color: #000; }
+.btn:hover { opacity: 0.9; }
+
+/* Timer Styles */
+.timer-container { text-align: center; margin-top: 30px; }
+.timer-circle { width: 200px; height: 200px; border-radius: 50%; border: 10px solid #0d6efd; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: #0d6efd; margin: 0 auto 20px; position: relative; }
+.timer-controls button { margin: 5px; font-weight: 600; }
+#calendar { background: white; border-radius: 10px; padding: 15px; margin-top: 40px; }
+.fc { background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); padding: 10px; }
+.fc-toolbar-title { font-weight: 700; font-size: 1.4rem; color: #212529; }
+.fc-button { border: none !important; background: #0d6efd !important; color: #fff !important; border-radius: 8px !important; padding: 5px 10px !important; transition: all 0.2s; }
+.fc-button:hover { opacity: 0.9; }
+.fc-daygrid-day-number, .fc-col-header-cell-cushion { color: #212529 !important; font-weight: 600; }
+#planContainer table { width: 100%; border-collapse: collapse; }
+#planContainer th, #planContainer td { border: 1px solid #dee2e6; padding: 8px; text-align: left; }
+.complete-btn { cursor: pointer; }
+
+/* Adaptive Study Planner unique color */
+.planner-btn { background-color: #6b5b95; }
+.planner-btn:hover { background-color: #5a4a84; }
+/* 🌿 Calendar Section Styling */
+#calendarSection {
+  background: #f8faff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 📝 Add Event Form Card */
+#calendarSection .card {
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+}
+
+#calendarSection .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 🎯 Form Inputs */
+#calendarSection input,
+#calendarSection select {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: 0.2s;
+}
+
+#calendarSection input:focus,
+#calendarSection select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.25);
+}
+
+/* 🔵 Add Event Button */
+#calendarSection button {
+  border-radius: 8px;
+  background-color: #007bff;
+  border: none;
+  transition: 0.3s ease-in-out;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+#calendarSection button:hover {
+  background-color: #0056d2;
+  transform: translateY(-1px);
+}
+
+/* 📅 Calendar Block */
+#calendar {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* 🧭 FullCalendar Toolbar */
+.fc-toolbar-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.fc .fc-toolbar-chunk button {
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  font-weight: 500 !important;
+  background: #007bff !important;
+  border: none !important;
+  color: #fff !important;
+  transition: 0.2s;
+}
+
+.fc .fc-toolbar-chunk button:hover {
+  background: #0056d2 !important;
+}
+
+/* 🗓️ Event Appearance */
+.fc-event {
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  border: none !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  font-weight: 500;
+  padding: 3px 6px !important;
+  transition: 0.2s;
+}
+
+.fc-event:hover {
+  filter: brightness(1.1);
+  cursor: pointer;
+}
+
+/* 📌 Highlight Today Cell */
+.fc-day-today {
+  background-color: #eaf3ff !important;
+  border-radius: 6px;
+}
+
+/* 🟢 Category Colors */
+.fc-event-school {
+  background-color: #28a745 !important; /* Green */
+  border: none !important;
+  color: #fff !important;
+}
+
+.fc-event-work {
+  background-color: #ffc107 !important; /* Yellow */
+  border: none !important;
+  color: #000 !important;
+}
+
+.fc-event-personal {
+  background-color: #17a2b8 !important; /* Blue */
+  border: none !important;
+  color: #fff !important;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  #calendarSection {
+    padding: 20px;
+  }
+
+  #calendarSection .card {
+    padding: 15px;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.2rem;
+  }
+}
+
+</style>
+<style>
+/* ===========================
+   General Notes Section
+=========================== */
+.notes-section {
+  max-width: 600px;
+  margin: 20px auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Input Section */
+.note-inputs h3 {
+  margin-bottom: 10px;
+  text-align: center;
+  color: #333;
+}
+
+.note-inputs input,
+.note-inputs textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.note-inputs textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* ===========================
+   Buttons
+=========================== */
+.button-group button {
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* Specific Button Colors */
+.button-group button {
+  background-color: #4a90e2; /* soft blue */
+  color: white;
+}
+
+.button-group button:hover {
+  background-color: #357ABD;
+}
+
+#openDrawingBtn {
+  background-color: #f7a1b8; /* soft pastel pink */
+  color: white;
+}
+
+#openDrawingBtn:hover {
+  background-color: #e07390;
+}
+
+#viewDrawingsBtn {
+  background-color: #ffb6c1; /* soft pink */
+  color: white;
+}
+
+#viewDrawingsBtn:hover {
+  background-color: #ff8aa0;
+}
+
+/* ===========================
+   Overlay Common
+=========================== */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.overlay-content {
+  background-color: #fff;
+  padding: 20px;
+  max-width: 700px;
+  width: 90%;
+  border-radius: 8px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+/* ===========================
+   Notes Cards
+=========================== */
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.note-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: #e8f0fe; /* soft pastel blue */
+  border: 1px solid #c6dafc;
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.note-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.note-content {
+  max-width: 85%;
+}
+
+.note-content strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.note-content p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* Delete Button Notes */
+.delete-btn {
+  background-color: #ff7f9b; /* soft pink */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  height: fit-content;
+  align-self: flex-start; /* compact vertical alignment */
+  transition: background 0.3s;
+}
+
+.delete-btn:hover {
+  background-color: #e05577;
+}
+
+/* Close Overlay */
+#closeOverlayBtn {
+  background-color: #4a90e2; /* soft blue */
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#closeOverlayBtn:hover {
+  background-color: #357ABD;
+}
+
+/* ===========================
+   Drawing Board
+=========================== */
+.canvas-tools {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.canvas-tools input[type=color] {
+  cursor: pointer;
+  border: none;
+  width: 35px;
+  height: 25px;
+  padding: 0;
+}
+
+.canvas-tools button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #4a90e2; /* soft blue */
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.canvas-tools button:hover {
+  background-color: #357ABD;
+}
+
+#closeDrawingBtn {
+  background-color: #4a90e2;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#closeDrawingBtn:hover {
+  background-color: #357ABD;
+}
+
+/* ===========================
+   Saved Drawings
+=========================== */
+.drawings-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.drawings-container img {
+  width: 200px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+  position: relative;
+}
+
+/* Delete Button Drawings */
+.deleteDrawingBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #ff7f9b;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 2px 5px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.deleteDrawingBtn:hover {
+  background-color: #e05577;
+}
+
+/* Close Saved Drawings Overlay */
+#closeDrawingsBtn {
+  background-color: #4a90e2; /* soft blue */
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#closeDrawingsBtn:hover {
+  background-color: #357ABD;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">MindMuse Dashboard</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav align-items-center">
+        <li class="nav-item"><a class="nav-link active" href="#" onclick="showSection('home')">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('tools')">Tools</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('calendarSection')">Calendar</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('timerSection')">Timer</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('notesSection')">Notes</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Home Section -->
+<div class="container section active" id="home">
+  <div id="greeting-container" class="mb-4">
+    <h2>Hi <span id="greeting-name">User</span>!</h2>
+    <p>Welcome back — here’s your recent activity & progress.</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card p-3 shadow-sm">
+        <h5>Tool Usage Breakdown</h5>
+        <p class="small-muted">Percentage of activity across tools</p>
+        <div class="chart-wrap" style="max-width: 300px; margin: 0 auto;">
+          <canvas id="toolPieChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card p-3 shadow-sm">
+        <h5>Daily Activity (Logins)</h5>
+        <p class="small-muted">Number of times you opened the app each day</p>
+        <div class="chart-wrap">
+          <canvas id="loginChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card p-3 shadow-sm">
+        <h5>Quiz Progress</h5>
+        <p class="small-muted">Scores across your attempts (earliest → latest)</p>
+        <div id="quizProgress"><p>Average Quiz Score: 0%</p></div>
+        <div class="chart-wrap">
+          <canvas id="quizChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card p-4 shadow-sm text-center">
+        <h5 class="mb-3">Your Flashcards</h5>
+        <p class="small-muted mb-3">Quickly view your saved flashcards and continue learning.</p>
+        <button class="btn btn-info btn-lg" onclick="viewFlashcards()">📚 View Flashcards</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Adaptive Study Planner inside dashboard/home -->
+  <div id="studyPlannerSection" class="mt-4">
+    <div class="card p-3 shadow-sm">
+      <h5>📊 Adaptive Study Planner</h5>
+      <div class="progress mb-3" style="height: 25px;">
+        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%;">Progress: 0%</div>
+      </div>
+      <div id="planContainer">
+        <p class="small-muted">No plan saved yet. Generate a plan in Study Planner to see it here.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Timer Section -->
+<div class="container section" id="timerSection">
+  <h2 class="mb-4">⏱ Focus Timer</h2>
+  
+  <div class="card p-4 shadow-sm text-center">
+    <div class="mb-3">
+      <label for="timerInput" class="form-label">Set Timer (minutes)</label>
+      <input type="number" id="timerInput" class="form-control" value="10" min="1" max="120">
+    </div>
+    
+    <div class="position-relative d-inline-block my-3">
+      <canvas id="timerCanvas" width="200" height="200"></canvas>
+      <div id="timerDisplay" 
+           style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                  font-size:2rem;font-weight:700;">10:00</div>
+    </div>
+    
+    <div class="mt-3">
+      <button class="btn btn-success me-2" id="startBtn">Start</button>
+      <button class="btn btn-warning me-2" id="pauseBtn">Pause</button>
+      <button class="btn btn-danger" id="resetBtn">Reset</button>
+    </div>
+  </div>
+</div>
+  <!-- Notes Display -->
+<!-- Notes Section -->
+<div class="container section" id="notesSection">
+  <div class="notes-section">
+    <div class="note-inputs">
+      <h3>Add a Note</h3>
+      <input type="text" id="noteTitle" placeholder="Title">
+      <textarea id="noteContent" placeholder="Write your note..."></textarea>
+      <div class="button-group">
+        <button id="saveNote">Save</button>
+        <button id="clearNote">Clear</button>
+        <button id="viewNotesBtn">View Saved Notes</button>
+        <button id="openDrawingBtn">Open Drawing Board</button>
+        <button id="viewDrawingsBtn">View Saved Drawings</button>
+      </div>
+    </div>
+
+    <div id="savedNotesOverlay" class="overlay">
+      <div class="overlay-content">
+        <h3>Saved Notes</h3>
+        <div class="notes-container" id="notesContainer"></div>
+        <button id="closeOverlayBtn">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Drawing Overlay -->
+<div id="drawingOverlay" class="overlay">
+  <div class="overlay-content">
+    <h3>Drawing Board</h3>
+    <div class="canvas-tools">
+      <label>Color:
+        <input type="color" id="penColor" value="#000000">
+      </label>
+      <button id="eraseBtn">Erase</button>
+      <button id="clearCanvasBtn">Clear</button>
+      <button id="saveCanvasBtn">Save</button>
+      <button id="closeDrawingBtn">Close</button>
+    </div>
+    <canvas id="drawCanvas" width="600" height="400" style="border:1px solid #ccc; background:#fff;"></canvas>
+  </div>
+</div>
+
+<div id="savedDrawingsOverlay" class="overlay">
+  <div class="overlay-content">
+    <h3>Saved Drawings</h3>
+    <div id="drawingsContainer" class="drawings-container"></div>
+    <button id="closeDrawingsBtn">Close</button>
+  </div>
+</div>
+
+<!-- Tools Section -->
+<div class="container section" id="tools">
+  <h2 class="mb-4">🛠️ Your Tools</h2>
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="card p-3 h-100">
+        <h5>📄 PDF Summarizer</h5>
+        <p class="small-muted">Quickly summarize PDF documents into concise notes.</p>
+        <a href="/pdf_summarizer" class="btn btn-primary mt-2 tool-btn">Use Tool</a>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card p-3 h-100">
+        <h5>📝 Quiz Generator</h5>
+        <p class="small-muted">Automatically create quizzes from your content for practice.</p>
+        <a href="/quiz_generator" class="btn btn-success mt-2 tool-btn">Use Tool</a>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card p-3 h-100">
+        <h5>🎬 Video Summarizer</h5>
+        <p class="small-muted">Summarize videos or YouTube links to extract main points quickly.</p>
+        <a href="/video_summarizer" class="btn btn-warning mt-2 tool-btn">Use Tool</a>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card p-3 h-100">
+        <h5>🔊 PDF to Audio</h5>
+        <p class="small-muted">Convert PDF documents into audio files for easy listening.</p>
+        <a href="/pdf_to_audio" class="btn btn-danger mt-2 tool-btn">Use Tool</a>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card p-3 h-100">
+        <h5>🧩 Flashcards</h5>
+        <p class="small-muted">Generate, view, and remember key points from your study material.</p>
+        <a href="/flashcards" class="btn btn-info mt-2 tool-btn">Use Tool</a>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card p-3 h-100">
+        <h5>📅 Adaptive Study Planner</h5>
+        <p class="small-muted">Create smart schedules and track your progress easily.</p>
+        <a href="/study_planner" class="btn mt-2 tool-btn planner-btn">Use Tool</a>
+      </div>
+    </div>
+  
+
+  </div>
+</div>
+<!-- Calendar Section -->
+<div class="container section" id="calendarSection">
+  <h2 class="mb-4 text-center">📅 Your Calendar</h2>
+
+  <!-- Add Event Form -->
+  <div class="card p-4 mb-4 shadow-sm">
+    <h3 class="text-center mb-4">Add Event</h3>
+    <form id="eventForm">
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" placeholder="Event Title" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control" id="date" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Start Time</label>
+        <input type="time" class="form-control" id="start" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">End Time</label>
+        <input type="time" class="form-control" id="end" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select id="category" class="form-select" required>
+          <option value="">Select Category</option>
+          <option value="school">School</option>
+          <option value="work">Work</option>
+          <option value="personal">Personal</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Add Event</button>
+    </form>
+  </div>
+
+  <!-- Calendar Display -->
+  <div id="calendar"></div>
+</div>
+<!-- Flashcards Section -->
+<div class="container section" id="flashcardsSection">
+  <h2 class="mb-4">📚 Flashcards</h2>
+  <div id="flashcardsContainer">
+    <p class="small-muted">No flashcards yet.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+let quizChart = null;
+let loginChart = null;
+let toolChart = null;
+let timerInterval = null;
+let remainingSeconds = 0;
+let isPaused = false;
+
+function showSection(sectionId) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+}
+
+// ===== Timer =====
+let timerDuration = 10 * 60; // default 10 mins in seconds
+let remainingTime = timerDuration;
+
+const canvas = document.getElementById('timerCanvas');
+const ctx = canvas.getContext('2d');
+const timerDisplay = document.getElementById('timerDisplay');
+
+function drawTimer(percent) {
+    const radius = 90;
+    const center = canvas.width / 2;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Background circle
+    ctx.beginPath();
+    ctx.arc(center, center, radius, 0, 2*Math.PI);
+    ctx.fillStyle = '#e9ecef';
+    ctx.fill();
+
+    // Progress arc
+    ctx.beginPath();
+    ctx.arc(center, center, radius, -Math.PI/2, -Math.PI/2 + 2*Math.PI*percent);
+    ctx.strokeStyle = '#0d6efd';
+    ctx.lineWidth = 15;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+}
+
+function updateDisplay() {
+    const mins = Math.floor(remainingTime / 60);
+    const secs = remainingTime % 60;
+    timerDisplay.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+    drawTimer(1 - remainingTime / timerDuration);
+}
+
+function startTimer() {
+    if (timerInterval) return;
+    timerInterval = setInterval(() => {
+        if (remainingTime <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            remainingTime = 0;
+            updateDisplay();
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.wav');
+            audio.play();
+        } else {
+            remainingTime--;
+            updateDisplay();
+        }
+    }, 1000);
+}
+
+function pauseTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+function resetTimer() {
+    pauseTimer();
+    remainingTime = timerDuration;
+    updateDisplay();
+}
+
+document.getElementById('startBtn').addEventListener('click', () => {
+    timerDuration = parseInt(document.getElementById('timerInput').value) * 60;
+    remainingTime = timerDuration;
+    updateDisplay();
+    startTimer();
+});
+document.getElementById('pauseBtn').addEventListener('click', pauseTimer);
+document.getElementById('resetBtn').addEventListener('click', resetTimer);
+updateDisplay();
+
+let calendar = null;
+
+// Show/hide sections
+function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(sectionId).classList.add('active');
+
+    // Initialize calendar when calendar section is shown
+    if (sectionId === 'calendarSection' && !calendar) {
+        initCalendar();
+    }
+}
+
+// Initialize FullCalendar
+function initCalendar() {
+    const calendarEl = document.getElementById('calendar');
+    if (!calendarEl) return;
+
+    // Category to color mapping
+    const categoryColors = {
+        school: { background: '#5dade2', border: '#2874a6' },
+        work: { background: '#58d68d', border: '#27ae60' },
+        personal: { background: '#f5b041', border: '#d68910' },
+        break: { background: '#f9e79f', border: '#f7dc6f' },
+        default: { background: '#a569bd', border: '#6c3483' } // fallback
+    };
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 650,
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: '/get_events', // Flask route
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+        dayMaxEvents: true,
+        eventDidMount: function(info) {
+            // Apply category colors
+            const cat = (info.event.extendedProps.category || 'default').toLowerCase();
+            const color = categoryColors[cat] || categoryColors['default'];
+            info.el.style.backgroundColor = color.background;
+            info.el.style.borderColor = color.border;
+        }
+    });
+
+    calendar.render();
+
+    // Add Event Form
+    const eventForm = document.getElementById('eventForm');
+    eventForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById('title').value;
+        const date = document.getElementById('date').value;
+        const start = document.getElementById('start').value;
+        const end = document.getElementById('end').value;
+        const category = document.getElementById('category').value;
+
+        const catLower = category.toLowerCase();
+        const colors = categoryColors[catLower] || categoryColors['default'];
+
+        const eventData = {
+            title,
+            start: `${date}T${start}`,
+            end: `${date}T${end}`,
+            category,
+            backgroundColor: colors.background,
+            borderColor: colors.border
+        };
+
+        try {
+            const resp = await fetch('/add_event', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventData)
+            });
+
+            if (resp.ok) {
+                calendar.refetchEvents(); // Refresh calendar events
+                eventForm.reset();
+            } else {
+                alert('Failed to add event.');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error adding event.');
+        }
+    });
+}
+
+// Initialize first active section
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('home'); // default
+});
+
+async function loadDashboardData() {
+    try {
+        const resp = await fetch('/api/dashboard_data');
+        if (!resp.ok) return console.error("Failed to fetch dashboard data");
+        const data = await resp.json();
+
+        // Greeting
+        document.getElementById('greeting-name').textContent = data.user_name || 'User';
+
+        // ===== Quiz Progress =====
+        const quizAttempts = data.quiz_attempts || [];
+        const quizContainer = document.getElementById("quizProgress");
+        if (quizAttempts.length === 0) {
+            quizContainer.innerHTML = "<p>No quiz attempts yet.</p>";
+        } else {
+            const quizPercent = quizAttempts.map(a => a.total > 0 ? (a.score / a.total * 100) : 0);
+            const avgScore = quizPercent.length ? (quizPercent.reduce((a,b)=>a+b,0)/quizPercent.length).toFixed(2) : 0;
+            quizContainer.innerHTML = `<p>Average Quiz Score: ${avgScore}%</p>`;
+
+            const ctxQuiz = document.getElementById('quizChart')?.getContext('2d');
+            if (ctxQuiz) {
+                if (quizChart) quizChart.destroy();
+                quizChart = new Chart(ctxQuiz, {
+                    type: 'bar',
+                    data: {
+                        labels: quizAttempts.map((_, i) => `Quiz ${i+1}`),
+                        datasets: [{
+                            label: 'Score (%)',
+                            data: quizPercent,
+                            backgroundColor: quizPercent.map((_, i) => `hsl(${i*60 % 360}, 70%, 50%)`)
+                        }]
+                    },
+                    options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }
+                });
+            }
+        }
+
+        // ===== Login Activity Chart =====
+        const loginObj = data.login_activity || {};
+        const loginDates = Object.keys(loginObj).sort();
+        const loginCounts = loginDates.map(d => loginObj[d]);
+        const ctxLogin = document.getElementById('loginChart').getContext('2d');
+        if (loginChart) loginChart.destroy();
+        loginChart = new Chart(ctxLogin, {
+            type: 'bar',
+            data: {
+                labels: loginDates.length ? loginDates : ['No activity'],
+                datasets: [ {
+                    label: 'Logins',
+                    data: loginCounts.length ? loginCounts : [0],
+                    backgroundColor: '#198754',
+                    barThickness: 20
+                } ]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+// ===== Tool Usage Pie Chart =====
+const toolUsage = data.tool_usage || {};
+const allTools = ['PDF Summarizer', 'Quiz Generator', 'Video Summarizer', 'PDF to Audio', 'Flashcards', 'Adaptive Study Planner'];
+const counts = allTools.map(tool => toolUsage[tool] || 0);
+
+const ctxTool = document.getElementById('toolPieChart').getContext('2d');
+if (toolChart) toolChart.destroy();
+const colors = ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#0dcaf0', '#6b5b95']; // purple for Study Planner
+toolChart = new Chart(ctxTool, {
+    type: 'pie',
+    data: {
+        labels: allTools,
+        datasets: [{
+            data: counts,
+            backgroundColor: colors
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { 
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': ' + context.parsed + ' uses';
+                    }
+                }
+            }
+        }
+    }
+});
+
+        
+    } catch (err) {
+        console.error("Error loading dashboard data:", err);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadDashboardData);
+</script>
+<script>
+async function loadFlashcards() {
+    const container = document.getElementById("flashcardsContainer");
+    container.innerHTML = "<p>Loading flashcards...</p>";
+
+    try {
+        const resp = await fetch("/get_flashcards");
+        if (!resp.ok) throw new Error("Failed to fetch flashcards");
+
+        const data = await resp.json();
+        container.innerHTML = "";
+
+        if (!data.flashcards || data.flashcards.length === 0) {
+            container.innerHTML = "<p>No saved flashcards.</p>";
+            return;
+        }
+
+        data.flashcards.forEach(fc => {
+            const card = document.createElement("div");
+            card.className = "card p-3 mb-3";
+
+            const pointsList = fc.points.map(p => `<li>${p}</li>`).join('');
+
+            card.innerHTML = `
+                <h5>
+                    ${fc.topic} 
+                    <button class="btn btn-sm btn-danger float-end deleteBtn">Delete</button>
+                </h5>
+                <ul>${pointsList}</ul>
+            `;
+
+            // Delete functionality
+            card.querySelector(".deleteBtn").addEventListener("click", async () => {
+                const delResp = await fetch(`/delete_flashcard/${fc.id}`, { method: "DELETE" });
+                if (delResp.ok) card.remove();
+            });
+
+            container.appendChild(card);
+        });
+
+    } catch (err) {
+        container.innerHTML = "<p class='text-danger'>Error loading flashcards.</p>";
+        console.error(err);
+    }
+}
+
+// Show flashcards section and load flashcards
+function viewFlashcards() {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById('flashcardsSection').classList.add('active');
+    loadFlashcards();
+}
+// Reference elements
+const planContainer = document.getElementById('planContainer');
+const progressBar = document.getElementById('progressBar');
+
+// Display timetable in Home section
+function displayDashboardPlan() {
+    planContainer.innerHTML = '';
+
+    const plan = JSON.parse(localStorage.getItem('dashboardPlan') || '[]');
+    if (plan.length === 0) {
+        planContainer.innerHTML = '<p class="text-muted">No plan saved yet. Generate a plan in Study Planner to see it here.</p>';
+        updateProgress(0);
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'table table-bordered text-center align-middle';
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
+    // Header row: first column is "Time", then days
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = `<th>Time</th>` + plan.map(d => `<th>${d.day}</th>`).join('');
+    thead.appendChild(headerRow);
+
+    // Collect all unique times across all days
+    const times = [...new Set(plan.flatMap(d => d.tasks.map(t => t.time)))].sort();
+
+    let totalTasks = 0;
+    let completedTasks = 0;
+
+    times.forEach(time => {
+        const row = document.createElement('tr');
+
+        // First column: Time
+        const timeCell = document.createElement('td');
+        timeCell.textContent = time;
+        row.appendChild(timeCell);
+
+        // Columns: each day
+        plan.forEach(day => {
+            const task = day.tasks.find(t => t.time === time);
+            const cell = document.createElement('td');
+
+            if (task) {
+                totalTasks++;
+                if (task.completed === undefined) task.completed = false;
+                if (task.completed) completedTasks++;
+
+                // Highlight breaks
+                const cls = task.subject.toLowerCase().includes('break') ? 'table-warning' : '';
+                cell.className = cls;
+
+                cell.innerHTML = `
+                    <div>${task.subject}</div>
+                    <button class="btn btn-sm ${task.completed ? 'btn-success' : 'btn-outline-success'} mt-1">
+                        ${task.completed ? '✔ Done' : 'Mark'}
+                    </button>
+                `;
+
+                // Toggle completion
+                cell.querySelector('button').addEventListener('click', () => {
+                    task.completed = !task.completed;
+                    localStorage.setItem('dashboardPlan', JSON.stringify(plan));
+                    displayDashboardPlan();
+                });
+            } else {
+                cell.textContent = '-';
+            }
+            row.appendChild(cell);
+        });
+
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    planContainer.appendChild(table);
+
+    // Update progress bar
+    const percent = totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    updateProgress(percent);
+}
+
+// Update progress bar function
+function updateProgress(percent) {
+    if (progressBar) {
+        progressBar.style.width = percent + '%';
+        progressBar.textContent = `Progress: ${percent}%`;
+    }
+}
+
+// Display dashboard on page load
+document.addEventListener('DOMContentLoaded', () => {
+    displayDashboardPlan();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  const titleInput = document.getElementById('noteTitle');
+  const contentInput = document.getElementById('noteContent');
+  const saveNoteBtn = document.getElementById('saveNote');
+  const clearNoteBtn = document.getElementById('clearNote');
+  const viewNotesBtn = document.getElementById('viewNotesBtn');
+  const closeOverlayBtn = document.getElementById('closeOverlayBtn');
+  const savedNotesOverlay = document.getElementById('savedNotesOverlay');
+  const notesContainer = document.getElementById('notesContainer');
+
+  let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+
+  // Render notes inside overlay
+  function renderNotes() {
+    notesContainer.innerHTML = '';
+    if (notes.length === 0) {
+      notesContainer.innerHTML = '<p class="text-muted">No notes saved yet</p>';
+      return;
+    }
+    notes.forEach((note, index) => {
+      const card = document.createElement('div');
+      card.className = 'note-card';
+      card.innerHTML = `
+        <div class="note-content">
+          <strong>${note.title || 'Untitled'}</strong>
+          <p>${note.content}</p>
+        </div>
+        <button class="delete-btn" data-index="${index}">Delete</button>
+      `;
+      notesContainer.appendChild(card);
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const i = e.target.getAttribute('data-index');
+        notes.splice(i, 1);
+        localStorage.setItem('notes', JSON.stringify(notes));
+        renderNotes();
+      });
+    });
+  }
+
+  // Save note
+  saveNoteBtn.addEventListener('click', () => {
+    const title = titleInput.value.trim();
+    const content = contentInput.value.trim();
+    if (!title && !content) return;
+
+    notes.push({ title, content, date: new Date() });
+    localStorage.setItem('notes', JSON.stringify(notes));
+    titleInput.value = '';
+    contentInput.value = '';
+  });
+
+  // Clear input fields
+  clearNoteBtn.addEventListener('click', () => {
+    titleInput.value = '';
+    contentInput.value = '';
+  });
+
+  // Show overlay
+  viewNotesBtn.addEventListener('click', () => {
+    savedNotesOverlay.style.display = 'flex';
+    renderNotes();
+  });
+
+  // Close overlay
+  closeOverlayBtn.addEventListener('click', () => {
+    savedNotesOverlay.style.display = 'none';
+  });
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const openDrawingBtn = document.getElementById('openDrawingBtn');
+  const drawingOverlay = document.getElementById('drawingOverlay');
+  const closeDrawingBtn = document.getElementById('closeDrawingBtn');
+  const drawCanvas = document.getElementById('drawCanvas');
+  const ctx = drawCanvas.getContext('2d');
+  const penColor = document.getElementById('penColor');
+  const eraseBtn = document.getElementById('eraseBtn');
+  const clearCanvasBtn = document.getElementById('clearCanvasBtn');
+  const saveCanvasBtn = document.getElementById('saveCanvasBtn');
+
+  const viewDrawingsBtn = document.getElementById('viewDrawingsBtn');
+  const savedDrawingsOverlay = document.getElementById('savedDrawingsOverlay');
+  const closeDrawingsBtn = document.getElementById('closeDrawingsBtn');
+  const drawingsContainer = document.getElementById('drawingsContainer');
+
+  let drawing = false;
+  let currentColor = penColor.value;
+  let erasing = false;
+
+  // Load existing canvas image
+  const savedImage = localStorage.getItem('drawing');
+  if(savedImage){
+    const img = new Image();
+    img.src = savedImage;
+    img.onload = () => ctx.drawImage(img, 0, 0);
+  }
+
+  // Drawing Overlay
+  openDrawingBtn.addEventListener('click', () => drawingOverlay.style.display = 'flex');
+  closeDrawingBtn.addEventListener('click', () => drawingOverlay.style.display = 'none');
+
+  // Color
+  penColor.addEventListener('change', (e) => { currentColor = e.target.value; erasing=false; });
+  eraseBtn.addEventListener('click', () => erasing=true);
+  clearCanvasBtn.addEventListener('click', () => ctx.clearRect(0,0,drawCanvas.width, drawCanvas.height));
+
+  drawCanvas.addEventListener('mousedown', () => drawing = true);
+  drawCanvas.addEventListener('mouseup', () => { drawing=false; ctx.beginPath(); });
+  drawCanvas.addEventListener('mousemove', e => {
+    if(!drawing) return;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = erasing ? '#fff' : currentColor;
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+  });
+
+  // Save drawing
+  saveCanvasBtn.addEventListener('click', () => {
+    const dataURL = drawCanvas.toDataURL();
+    let drawings = JSON.parse(localStorage.getItem('drawings') || '[]');
+    drawings.push(dataURL);
+    localStorage.setItem('drawings', JSON.stringify(drawings));
+    alert('Drawing saved!');
+  });
+
+  // View Saved Drawings
+  function renderDrawings(){
+    drawingsContainer.innerHTML = '';
+    const savedDrawings = JSON.parse(localStorage.getItem('drawings') || '[]');
+    if(savedDrawings.length === 0){
+      drawingsContainer.innerHTML = '<p class="text-muted">No drawings saved yet</p>';
+      return;
+    }
+    savedDrawings.forEach((dataURL,index)=>{
+      const card = document.createElement('div');
+      card.style.position='relative';
+      card.innerHTML = `
+        <img src="${dataURL}" alt="Drawing ${index+1}">
+        <button class="deleteDrawingBtn" data-index="${index}">Delete</button>
+      `;
+      drawingsContainer.appendChild(card);
+    });
+    document.querySelectorAll('.deleteDrawingBtn').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const i = e.target.getAttribute('data-index');
+        const drawings = JSON.parse(localStorage.getItem('drawings') || '[]');
+        drawings.splice(i,1);
+        localStorage.setItem('drawings', JSON.stringify(drawings));
+        renderDrawings();
+      });
+    });
+  }
+
+  viewDrawingsBtn.addEventListener('click', ()=>{
+    savedDrawingsOverlay.style.display='flex';
+    renderDrawings();
+  });
+
+  closeDrawingsBtn.addEventListener('click', ()=> savedDrawingsOverlay.style.display='none');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF to Audio</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        background-color: #f4f6f8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 30px;
+    }
+    .container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    h1 {
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+        color: #0d6efd;
+    }
+    .progress-container {
+        width: 100%;
+        background-color: #e9ecef;
+        border-radius: 10px;
+        margin-top: 20px;
+        height: 30px;
+    }
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background-color: #0d6efd;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+    #downloadLink, #audioPlayer {
+        margin-top: 20px;
+        text-align: center;
+    }
+    input[type="file"] {
+        margin-bottom: 15px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>PDF to Audio Converter</h1>
+
+    <form id="pdfForm" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" class="form-control" required>
+        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+        <button type="submit" class="btn btn-primary w-100 mt-2">Convert to Audio</button>
+    </form>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="pdfProgress">0%</div>
+    </div>
+
+    <div id="downloadLink"></div>
+    <div id="audioPlayer"></div>
+</div>
+
+<script>
+    const form = document.getElementById('pdfForm');
+    const progressBar = document.getElementById('pdfProgress');
+    const downloadDiv = document.getElementById('downloadLink');
+    const audioDiv = document.getElementById('audioPlayer');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        // Reset UI
+        progressBar.style.width = '0%';
+        progressBar.textContent = '0%';
+        progressBar.style.backgroundColor = '#0d6efd';
+        downloadDiv.innerHTML = '';
+        audioDiv.innerHTML = '';
+
+        fetch('/pdf_to_audio_process', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'success') {
+                const audioFile = data.audio_file;
+                checkProgress(formData.get('user_id'), audioFile);
+            }
+        })
+        .catch(err => console.error(err));
+    });
+
+    function checkProgress(userId, audioFile) {
+        const interval = setInterval(() => {
+            fetch(`/pdf_progress?user_id=${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                let progress = data.progress || 0;
+                progressBar.style.width = progress + '%';
+                progressBar.textContent = progress + '%';
+
+                if(progress >= 100) {
+                    clearInterval(interval);
+                    // Show download button
+                    downloadDiv.innerHTML = `<a href="/static/audios/${audioFile}" download class="btn btn-success">Download Audio</a>`;
+                    // Show audio player
+                    audioDiv.innerHTML = `<audio controls autoplay style="width:100%; margin-top:10px;">
+                                              <source src="/static/audios/${audioFile}" type="audio/mpeg">
+                                              Your browser does not support the audio element.
+                                          </audio>`;
+                } else if(progress === -1) {
+                    clearInterval(interval);
+                    progressBar.style.backgroundColor = 'red';
+                    progressBar.textContent = 'Error';
+                }
+            });
+        }, 1000);
+    }
+</script>
+</body>
+</html>
