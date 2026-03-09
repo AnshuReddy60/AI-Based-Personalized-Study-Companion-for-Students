@@ -24,32 +24,59 @@
         </div>
     </div>
 </div>
+<footer style="background: linear-gradient(90deg,#6A11CB,#2575FC); color:white; padding:100px 0;" class="mt-5">
 
-<!-- Features Preview Section -->
-<div class="container my-5">
-    <h2 class="text-center fw-bold mb-4">Key Features</h2>
-    <div class="row text-center">
-        <div class="col-md-4 mb-3">
-            <div class="card p-3 h-100">
-                <h5 class="fw-bold">AI Study Companion</h5>
-                <p class="mt-2">Interactive assistant to help you study smarter and retain more.</p>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card p-3 h-100">
-                <h5 class="fw-bold">Personalized Quizzes</h5>
-                <p class="mt-2">Auto-generated quizzes based on your weak areas and progress.</p>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card p-3 h-100">
-                <h5 class="fw-bold">Adaptive Planner</h5>
-                <p class="mt-2">Smart scheduling and reminders tailored to your study habits.</p>
-            </div>
-        </div>
-    </div>
-    <div class="text-center mt-4">
-        <a href="{{ url_for('features') }}" class="btn btn-primary btn-lg">View All Features</a>
-    </div>
+<div class="container">
+
+<div class="row gy-4">
+
+<div class="col-md-4">
+<h4 class="fw-bold">MindMuse</h4>
+<p class="mt-3">
+MindMuse is an AI-powered study platform helping students summarize PDFs,
+generate quizzes, create flashcards, and plan smarter study schedules.
+</p>
 </div>
+
+<div class="col-md-3">
+<h6 class="fw-bold">Platform</h6>
+<ul class="list-unstyled mt-3">
+<li><a href="/features" class="text-white text-decoration-none">Features</a></li>
+<li><a href="/about" class="text-white text-decoration-none">About</a></li>
+<li><a href="/dashboard" class="text-white text-decoration-none">Dashboard</a></li>
+</ul>
+</div>
+
+<div class="col-md-3">
+<h6 class="fw-bold">AI Tools</h6>
+<ul class="list-unstyled mt-3">
+<li>📄 PDF Summarizer</li>
+<li>❓ Quiz Generator</li>
+<li>🧠 Flashcards</li>
+<li>🎥 Video Summarizer</li>
+<li>🎧 PDF to Audio</li>
+<li>📅 Study Planner</li>
+</ul>
+</div>
+
+<div class="col-md-2">
+<h6 class="fw-bold">Productivity</h6>
+<ul class="list-unstyled mt-3">
+<li>🗓 Calendar</li>
+<li>⏱ Timer</li>
+<li>📝 Notes</li>
+</ul>
+</div>
+
+</div>
+
+<hr style="opacity:0.4;" class="mt-5">
+
+<div class="text-center small">
+© 2026 MindMuse • AI Powered Study Companion
+</div>
+
+</div>
+
+</footer>
 {% endblock %}

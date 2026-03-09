@@ -1,4 +1,4 @@
-from flask import Flask,g, render_template, request, jsonify, redirect, url_for
+from flask import Flask,g, render_template, request, jsonify, redirect, url_for, session
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -421,8 +421,7 @@ def contact():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("index"))
-
+    return render_template("logout.html")
 @app.route("/summarizer_tool")
 @login_required
 def summarizer_page():

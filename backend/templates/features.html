@@ -1,13 +1,172 @@
 {% extends "layout.html" %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Features of MindMuse</h2>
-    <ul class="list-group">
-        <li class="list-group-item">📄 PDF Summarizer - Get concise summaries of study material.</li>
-        <li class="list-group-item">❓ Quiz Maker - Generate quizzes from your notes.</li>
-        <li class="list-group-item">📊 Progress Tracker - Track your learning journey.</li>
-        <li class="list-group-item">🃏 Flashcards - Boost memory with spaced repetition.</li>
-        <li class="list-group-item">📅 Study Planner - Organize tasks and stay on schedule.</li>
-    </ul>
+
+<!-- HERO SECTION -->
+
+<section style="
+background: linear-gradient(135deg,#6a11cb,#2575fc);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:white;
+padding:60px 20px;
+">
+
+<div class="container">
+
+<h1 class="fw-bold mb-4" style="font-size:3.5rem;">
+Powerful Learning Tools 🚀
+</h1>
+
+<p class="lead col-md-8 mx-auto" style="font-size:1.25rem;">
+MindMuse provides AI-powered tools designed to improve learning efficiency,
+help students understand content faster, and stay organized throughout their studies.
+</p>
+
 </div>
+</section>
+
+<!-- FEATURES GRID -->
+
+<section class="py-5">
+<div class="container">
+
+<div class="row g-4">
+
+<!-- PDF SUMMARIZER -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">📄</div>
+<h5 class="mt-3 fw-bold">PDF Summarizer</h5>
+<p class="text-muted">
+Upload PDFs and instantly generate concise summaries that highlight key ideas.
+</p>
+
+</div>
+</div>
+
+<!-- QUIZ GENERATOR -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">❓</div>
+<h5 class="mt-3 fw-bold">Quiz Generator</h5>
+<p class="text-muted">
+Generate quizzes by searching or uploading topics. Includes Test Mode that
+calculates results and saves them to your dashboard.
+</p>
+
+</div>
+</div>
+
+<!-- FLASHCARD GENERATOR -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">🃏</div>
+<h5 class="mt-3 fw-bold">Flashcard Generator</h5>
+<p class="text-muted">
+Turn study material into quick flashcards for easier revision and memory retention.
+</p>
+
+</div>
+</div>
+
+<!-- PDF TO AUDIO -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">🎧</div>
+<h5 class="mt-3 fw-bold">PDF to Audio</h5>
+<p class="text-muted">
+Convert text from PDF documents into audio to support auditory learning.
+</p>
+
+</div>
+</div>
+
+<!-- VIDEO SUMMARIZER -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">🎥</div>
+<h5 class="mt-3 fw-bold">Video Summarizer</h5>
+<p class="text-muted">
+Summarize long educational videos or YouTube lectures into key takeaways.
+</p>
+
+</div>
+</div>
+
+<!-- STUDY PLANNER -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">📅</div>
+<h5 class="mt-3 fw-bold">Adaptive Study Planner</h5>
+<p class="text-muted">
+Create personalized study schedules based on subjects, skill level,
+available hours, and deadlines.
+</p>
+
+</div>
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">📊</div>
+<h5 class="mt-3 fw-bold">Progress Dashboard</h5>
+<p class="text-muted">
+Track quiz scores, saved flashcards, and overall learning progress.
+</p>
+
+</div>
+</div>
+
+<!-- NOTES -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">📝</div>
+<h5 class="mt-3 fw-bold">Notes Section</h5>
+<p class="text-muted">
+Write, edit, and store study notes inside the platform for quick reference.
+</p>
+
+</div>
+</div>
+
+<!-- TIMER -->
+
+<div class="col-md-4">
+<div class="card p-4 shadow border-0 h-100 text-center">
+
+<div style="font-size:50px;">⏱</div>
+<h5 class="mt-3 fw-bold">Study Timer & Calendar</h5>
+<p class="text-muted">
+Stay productive with built-in study timers and a calendar to organize schedules.
+</p>
+
+</div>
+</div>
+
+</div>
+
+</div>
+</section>
+
 {% endblock %}

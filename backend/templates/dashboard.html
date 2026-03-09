@@ -471,7 +471,9 @@ body { background-color: #f4f6f8; font-family: 'Segoe UI', Tahoma, Geneva, Verda
         <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('timerSection')">Timer</a></li>
 
         <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('notesSection')">Notes</a></li>
-        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        <li class="nav-item">
+<a class="nav-link fw-bold" href="{{ url_for('logout') }}">Logout</a>
+</li>
       </ul>
     </div>
   </div>
