@@ -54,6 +54,21 @@ This project was developed as a **major academic project** with a focus on pract
 5. Progress is stored and displayed to the user  
 
 ---
+<img width="1280" height="584" alt="IMG-20251026-WA0005" src="https://github.com/user-attachments/assets/4707c1c7-ceaf-4234-9e86-3c64bab3b160" />
+
+
+
+<img width="1280" height="552" alt="IMG-20251026-WA0008" src="https://github.com/user-attachments/assets/842e66bd-7cd6-4d52-8564-87cf6c99e57b" />
+
+
+
+<img width="1280" height="568" alt="IMG-20251026-WA0006" src="https://github.com/user-attachments/assets/d5ba1620-9938-4438-9062-46b5a45ad631" />
+
+
+
+<img width="1280" height="576" alt="IMG-20251026-WA0003" src="https://github.com/user-attachments/assets/186d0acf-0b05-4ba6-a239-610ebb7da273" />
+
+
 
 ## ⚙️ Installation & Setup (Local)
 
@@ -69,4 +84,4 @@ python app.py
 
 5. Open the application in your browser
 
-   http://localhost:5000/
+   http://localhost:5000/ 
